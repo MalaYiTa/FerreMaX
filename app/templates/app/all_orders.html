@@ -1,0 +1,72 @@
+{% extends "app/base.html" %}
+
+{% block contenido %}
+<br>
+<br>
+<div class="container">
+    <header class="my-4">
+        <h1 style="color: yellowgreen;" style=" text-align: center;">FerreMaX</h1>
+    </header>
+    <br>
+    <hr>
+    <h1>Todas las Órdenes</h1>
+    <form method="get" class="mb-4">
+        <div class="form-row">
+            <div class="col">
+                <input type="text" name="query" class="form-control" placeholder="Buscar por código o usuario" value="{{ request.GET.query }}">
+            </div>
+            
+            <div class="col">
+                <input type="date" name="end_date" class="form-control" placeholder="dd-mm-aaaa" value="{{ request.GET.end_date }}">
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+            </div>
+        </div>
+    </form>
+    {% if orders %}
+    <table class="order-table">
+        <thead>
+            <tr>
+                <th>Pedido #</th>
+                <th>Usuario</th>
+                <th>Fecha</th>
+                <th>Total</th>
+                <th>Detalles</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.order_number }}</td>
+                <td>{{ order.user.username }}</td>
+                <td>{{ order.created_at }}</td>
+                <td>${{ order.total_price }}</td>
+                <td>
+                    <a href="{% url 'order_detail' order.id %}" class="btn btn-primary btn-sm">Ver Detalles</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No hay órdenes que coincidan con los criterios de búsqueda.</p>
+    {% endif %}
+</div>
+
+<style>
+    .order-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: auto;
+    }
+    .order-table th, .order-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    .order-table th {
+        background-color: #f2f2f2;
+    }
+</style>
+{% endblock %}
